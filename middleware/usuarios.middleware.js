@@ -1,21 +1,19 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-exports.require = async (req, res, next) => {
+exports.required = async (req, res, next) => {
     try {
-        res.locals.IdUsuario = 0;
-    } catch (error) {
-        const token = req.headers.authorization.split("")[1];
-        const decode = jwt.decode(token, "senhadojwt")
+        res.locals.idUsuario = 0;
 
+        const token = req.headers.authorization.split(" ")[1];
+        const decode = jwt.decode(token, "senhadojwt");
+        
         if (decode.id) {
-            res.locals.IdUsuario = decode.id;
+            res.locals.idUsuario = decode.id;
             next();
         } else {
-            return res.status(401).send({ "Mensagem": "Usuario não Autenticado" });
-
+            return res.status(401).send({"Mensagem": "Usuario não Autenticado"});
         }
-    }catch (error) {
-        return res.status(500).send({ "error": error.mensagem });
+    } catch (error) {
+        return res.status(500).send(error);
     }
 }
-
